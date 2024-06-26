@@ -11,22 +11,22 @@ The objective of this project is to show my habilities developing, managing fina
 - **User Management:** Sign in, login and management of profile of user.
 - **Portfolio Management:** Creation, visualization and update of portfolios.
 - **Transactions:** Performing stock buying and selling transactions with messaging through Kafka.
-- **Consulta de Datos Financieros:** Integración con una API externa para obtener precios de acciones en tiempo real.
-- **Rendimiento y Escalabilidad:** Uso de Redis para cacheo y Kafka para mensajería de alta performance.
+- **Financial data consulting:** Integrate with an external API for asking for Integración con una API externa para obtener precios de acciones en tiempo real.
+- **Performance and scalability:** Using Redis for caching and Kafka for queues and messages.
 
-## Tecnologías Utilizadas
+## Used Technologies
 - **Backend:** Java (Spring Boot)
-- **Base de Datos:** PostgreSQL
+- **Data Base:** PostgreSQL
 - **Cache:** Redis
-- **Mensajería:** Apache Kafka
+- **Messages:** Apache Kafka
 - **Frontend:** ReactJS
-- **Autenticación:** JWT (JSON Web Tokens)
-- **Construcción:** Gradle
-- **Contenedores:** Docker
+- **Autentication:** JWT (JSON Web Tokens)
+- **Build:** Gradle
+- **Containers:** Docker
 - **CI/CD:** Jenkins
 
-## Arquitectura del Proyecto
-La aplicación está diseñada utilizando una arquitectura de microservicios, con los siguientes componentes principales:
+## 🏛️ Project architecture
+The app is designed with microservices architectureLa aplicación está diseñada utilizando una arquitectura de microservicios, con los siguientes componentes principales:
 - **Servicio de Autenticación y Autorización**
 - **Servicio de Gestión de Usuarios**
 - **Servicio de Gestión de Portafolios**
@@ -34,22 +34,22 @@ La aplicación está diseñada utilizando una arquitectura de microservicios, co
 - **Servicio de Datos Financieros**
 - **Servicio de Notificaciones**
 
-## Instalación y Configuración
-### Prerrequisitos
-- Java 11 o superior
-- Node.js y npm
+## 🛠️ Install and Settings
+### Pre requisites 
+- Java 17 or higher
+- Node.js and npm
 - PostgreSQL
 - Redis
 - Apache Kafka
 - Docker
 - Jenkins
 
-### Configuración del Entorno de Desarrollo
+### ⚙️ Environment Config 
 #### Backend
-1. **Clonar el repositorio:**
+1. **Clone Repo:**
     ```sh
     git clone https://github.com/LeoBellier/PortfolioManagement.git
-    cd PortfolioManagement/backend
+    cd PortfolioManagement/backend\
     ```
 
 2. **Configurar PostgreSQL:**
@@ -67,7 +67,7 @@ La aplicación está diseñada utilizando una arquitectura de microservicios, co
 5. **Configurar Docker:**
     - Crear un archivo `Dockerfile` para el backend:
     ```dockerfile
-    FROM openjdk:11-jdk-slim
+    FROM openjdk:17-jdk-slim
     VOLUME /tmp
     COPY build/libs/*.jar app.jar
     ENTRYPOINT ["java","-jar","/app.jar"]
