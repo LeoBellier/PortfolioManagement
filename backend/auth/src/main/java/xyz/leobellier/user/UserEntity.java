@@ -14,63 +14,67 @@ import java.util.List;
 @Table(name = "users")
 public class UserEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(nullable = false)
-    String id;
+    private Integer id;
 
-    @Column(nullable = false)
-    String name;
+    @Column()
+    private String name;
 
-    @Column(nullable = false)
-    String lastname;
+    @Column
+    private String lastname;
 
     @Column(nullable = false, unique = true)
-    String email;
+    private String email;
 
     @Column(nullable = false)
-    String password;
+    private String password;
 
     @CreatedDate
-    @Column(nullable = false)
-    Date createdAt;
+    @Column()
+    private Date createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
-    Date updateAt;
+    @Column()
+    private Date updateAt;
 
-    @Column(nullable = false)
-    Date born;
+    @Column()
+    private Date born;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public UserEntity setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public UserEntity setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getLastname() {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
+    public UserEntity setLastname(String lastname) {
         this.lastname = lastname;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public UserEntity setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     @Override
@@ -84,7 +88,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name + " " + lastname;
+        return email;
     }
 
     @Override
@@ -107,8 +111,9 @@ public class UserEntity implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 
-    public void setPassword(String password) {
+    public UserEntity setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public Date getCreatedAt() {

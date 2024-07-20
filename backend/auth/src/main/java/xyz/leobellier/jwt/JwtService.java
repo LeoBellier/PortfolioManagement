@@ -23,7 +23,7 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    private String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails){
         return generateToken(new HashMap<>(), userDetails);
     }
 
@@ -56,6 +56,14 @@ public class JwtService {
                 .getBody();
     }
 
+    public long getJwtExpiration() {
+        return jwtExpiration;
+    }
+
+    public void setJwtExpiration(long jwtExpiration) {
+        this.jwtExpiration = jwtExpiration;
+    }
+
     private Key getSignInKey() {
         byte [] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -77,5 +85,6 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
 
 }
