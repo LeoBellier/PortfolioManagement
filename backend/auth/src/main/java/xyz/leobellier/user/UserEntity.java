@@ -18,7 +18,7 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private Integer id;
 
-    @Column()
+    @Column
     private String name;
 
     @Column
