@@ -1,7 +1,7 @@
 package xyz.leobellier.user.controllers;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import xyz.leobellier.user.UserEntity;
@@ -9,8 +9,8 @@ import xyz.leobellier.user.service.UserServices;
 
 import java.util.List;
 
+@RestController
 @RequestMapping("/users")
-@Controller
 public class UserController {
     private final UserServices userServices;
     public UserController(UserServices userServices) {
