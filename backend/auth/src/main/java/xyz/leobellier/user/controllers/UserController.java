@@ -19,7 +19,6 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<List<UserEntity>> getUsers() {
         List<UserEntity> users = userServices.getAllUsers();
-        if (users.isEmpty()) {return ResponseEntity.status(204).body(users);}
         return ResponseEntity.ok(users);
     }
 }
