@@ -120,23 +120,26 @@ public class UserEntity implements UserDetails {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public UserEntity setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
     public Date getUpdateAt() {
         return updateAt;
     }
 
-    public void setUpdateAt(Date updateAt) {
+    public UserEntity setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+        return this;
     }
 
     public Date getBorn() {
         return born;
     }
 
-    public void setBorn(Date born) {
+    public UserEntity setBorn(Date born) {
         this.born = born;
+        return this;
     }
 }
