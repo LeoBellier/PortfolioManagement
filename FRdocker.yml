@@ -1,0 +1,94 @@
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: portfolio_db
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    ports:
+      - "9092:9092"
+    networks:
+      - backend
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+    networks:
+      - backend
+
+  api-gateway:
+    build: ./services/api-gateway
+    depends_on:
+      - auth-service
+      - portfolio-service
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+      - frontend
+
+  auth-service:
+    build: ./services/auth-service
+    environment:
+      DATABASE_URL: jdbc:postgresql://database:5432/auth_db
+    depends_on:
+      - database
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+
+  portfolio-service:
+    build: ./services/portfolio-service
+    environment:
+      DATABASE_URL: jdbc:postgresql://database:5432/portfolio_db
+    depends_on:
+      - database
+    ports:
+      - "8082:8082"
+    networks:
+      - backend
+
+  notification-service:
+    build: ./services/notification-service
+    depends_on:
+      - kafka
+    ports:
+      - "8083:8083"
+    networks:
+      - backend
+
+  reporting-service:
+    build: ./services/reporting-service
+    depends_on:
+      - kafka
+    ports:
+      - "8084:8084"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge

@@ -1,259 +1,45 @@
-# PortfolioManagement
+# Portfolio Management System
 
-## Project description
-This proyect is a portfolio investment manager, designed for help users to manages his investments, make transactions and monitoring their portfolios performance. The application is using Java with Spring Boot in backend, PostgreSQL as database, Redis for caching and Kafka for interaction betweend services. The frontend is in ReactJS
+The **Portfolio Management System** is a cloud-native, microservices-based application designed to help users manage their financial portfolios efficiently. This system is deployed on **AWS** and leverages various modern technologies, including **Spring Boot, Kafka, PostgreSQL, Redis, and Docker**.
 
-## Project Objetive
-The objective of this project is to show my habilities developing, managing financial data and deploying a distributed application, offering a robust and scalable application for portfolio management of any small investor
+## System Architecture
 
-## Main Features
-- **Authentication and authorization:** Implementing JWT for management of authentication and authorization of users.
-- **User Management:** Sign in, login and management of profile of user.
-- **Portfolio Management:** Creation, visualization and update of portfolios.
-- **Transactions:** Performing stock buying and selling transactions with messaging through Kafka.
-- **Financial data consulting:** Integrate with an external API for asking for Integración con una API externa para obtener precios de acciones en tiempo real.
-- **Performance and scalability:** Using Redis for caching and Kafka for queues and messages.
+The system follows a **microservices architecture** where different services handle specific functionalities. These services communicate via **REST APIs and Kafka for event-driven messaging**.
 
-## Used Technologies
-- **Backend:** Java (Spring Boot)
-- **Data Base:** PostgreSQL
-- **Cache:** Redis
-- **Messages:** Apache Kafka
-- **Frontend:** ReactJS
-- **Autentication:** JWT (JSON Web Tokens)
-- **Build:** Gradle
-- **Containers:** Docker
-- **CI/CD:** Jenkins
+### High-Level System Context
 
-## 🏛️ Project architecture
-The app is designed with microservices architectureLa aplicación está diseñada utilizando una arquitectura de microservicios, con los siguientes componentes principales:
-- **Servicio de Autenticación y Autorización**
-- **Servicio de Gestión de Usuarios**
-- **Servicio de Gestión de Portafolios**
-- **Servicio de Transacciones**
-- **Servicio de Datos Financieros**
-- **Servicio de Notificaciones**
+```mermaid
+graph TD;
+  User[User] -->|Interacts with| System[Portfolio Management System]
+  Admin[Administrator] -->|Manages| System
 
-## 🛠️ Install and Settings
-### Pre requisites 
-- Java 17 or higher
-- Node.js and npm
-- PostgreSQL
-- Redis
-- Apache Kafka
-- Docker
-- Jenkins
+  System -->|Uses| ExternalAPI[External Market Data API]
+  System -->|Deploys on| AWS[AWS Cloud]
+  System -->|Authenticates with| AuthProvider[OAuth2 / Identity Provider]
+  System -->|Notifies Users via| EmailService[Email Notification Service]
+  System -->|Stores Data in| Database[(PostgreSQL)]
+  System -->|Caches Data in| RedisCache[(Redis)]
+  System -->|Processes Events with| Kafka[(Kafka Broker)]
+  System -->|Stores Reports in| S3[(AWS S3)]
+```
 
-### ⚙️ Environment Config 
-#### Backend
-1. **Clone Repo:**
-    ```sh
-    git clone https://github.com/LeoBellier/PortfolioManagement.git
-    cd PortfolioManagement/backend\
-    ```
+## Communication Between Services
 
-2. **Configurar PostgreSQL:**
-    - Crear una base de datos llamada `portfolio_management`.
-    - Configurar las credenciales de la base de datos en el archivo `application.properties`.
+- **API Gateway**: Acts as the entry point for users and routes requests to the appropriate microservices.
+- **Service Discovery (Eureka)**: Enables dynamic service registration and discovery.
+- **Synchronous Communication**: RESTful APIs are used for direct service-to-service interaction.
+- **Asynchronous Communication**: Kafka is used for event-driven messaging to decouple services and improve scalability.
+- **Database & Caching**: PostgreSQL serves as the primary data store, while Redis is used for caching frequently accessed data.
 
-3. **Configurar Redis:**
-    - Instalar y ejecutar Redis en tu máquina local.
+## Deployment
 
-4. **Configurar Kafka:**
-    - Descargar e instalar Kafka.
-    - Iniciar ZooKeeper y Kafka Server.
-    - Crear un topic llamado `portfolio-transactions`.
+The system is containerized using **Docker** and orchestrated using **Kubernetes on AWS (EKS)**. Other AWS services such as **S3** (for storage) and **SNS/SQS** (for notifications) are also integrated.
 
-5. **Configurar Docker:**
-    - Crear un archivo `Dockerfile` para el backend:
-    ```dockerfile
-    FROM openjdk:17-jdk-slim
-    VOLUME /tmp
-    COPY build/libs/*.jar app.jar
-    ENTRYPOINT ["java","-jar","/app.jar"]
-    ```
-    - Crear un archivo `docker-compose.yml` para orquestar los servicios:
-    ```yaml
-    version: '3.8'
-    services:
-      postgres:
-        image: postgres:latest
-        environment:
-          POSTGRES_DB: portfolio_management
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        ports:
-          - "5432:5432"
+## Future Enhancements
 
-      redis:
-        image: redis:latest
-        ports:
-          - "6379:6379"
+- Implementing GraphQL for optimized data fetching.
+- Enhancing monitoring with Prometheus & Grafana.
+- Expanding event-driven capabilities with additional Kafka topics.
 
-      zookeeper:
-        image: wurstmeister/zookeeper:3.4.6
-        ports:
-          - "2181:2181"
-
-      kafka:
-        image: wurstmeister/kafka:2.12-2.2.1
-        ports:
-          - "9092:9092"
-        environment:
-          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
-      backend:
-        build: .
-        ports:
-          - "8080:8080"
-        depends_on:
-          - postgres
-          - redis
-          - kafka
-    ```
-
-6. **Instalar dependencias y construir el proyecto:**
-    ```sh
-    ./gradlew clean build
-    ```
-
-7. **Ejecutar la aplicación con Docker Compose:**
-    ```sh
-    docker-compose up
-    ```
-
-#### Frontend
-1. **Clonar el repositorio:**
-    ```sh
-    cd ../frontend
-    ```
-
-2. **Instalar dependencias:**
-    ```sh
-    npm install
-    ```
-
-3. **Configurar variables de entorno:**
-    - Crear un archivo `.env` en el directorio `frontend` con la URL del backend:
-    ```
-    REACT_APP_BACKEND_URL=http://localhost:8080/api
-    ```
-
-4. **Ejecutar la aplicación:**
-    ```sh
-    npm start
-    ```
-
-## Uso de la Aplicación
-### Endpoints Principales
-#### Backend
-- **Autenticación:**
-    - `POST /api/auth/register`: Registro de nuevo usuario.
-    - `POST /api/auth/login`: Inicio de sesión.
-- **Gestión de Usuarios:**
-    - `GET /api/users/{id}`: Obtener información del usuario.
-    - `PUT /api/users/{id}`: Actualizar información del usuario.
-- **Gestión de Portafolios:**
-    - `POST /api/portfolios`: Crear un nuevo portafolio.
-    - `GET /api/portfolios/{id}`: Obtener información de un portafolio.
-    - `PUT /api/portfolios/{id}`: Actualizar un portafolio.
-- **Transacciones:**
-    - `POST /api/transactions`: Ejecutar una transacción (compra/venta).
-- **Datos Financieros:**
-    - `GET /api/stocks/{symbol}`: Obtener el precio de una acción en tiempo real.
-
-#### Frontend
-1. **Registro y Login:**
-    - Páginas para registrar nuevos usuarios y para iniciar sesión.
-2. **Gestión de Perfil:**
-    - Página para ver y actualizar el perfil de usuario.
-3. **Gestión de Portafolios:**
-    - Página para crear, ver y actualizar portafolios de inversión.
-4. **Transacciones:**
-    - Página para ejecutar transacciones de compra y venta de acciones.
-5. **Consulta de Datos Financieros:**
-    - Página para consultar el precio de acciones en tiempo real.
-
-## Pruebas
-### Pruebas Unitarias
-- Utilizar JUnit y Mockito para pruebas unitarias en el backend.
-- Utilizar Jest para pruebas unitarias en el frontend.
-### Pruebas de Integración
-- Utilizar Spring Boot Test para pruebas de integración en el backend.
-- Utilizar Cypress para pruebas de integración en el frontend.
-### Pruebas de Carga
-- Utilizar JMeter o Gatling para simular carga y medir el rendimiento del sistema.
-
-## Integración Continua y Despliegue
-### Jenkins
-1. **Configurar Jenkins:**
-    - Instalar Jenkins en tu máquina local o servidor.
-    - Instalar los plugins necesarios (Gradle, Docker, Docker Compose).
-
-2. **Pipeline de Jenkins:**
-    - Crear un archivo `Jenkinsfile` en el repositorio:
-    ```groovy
-    pipeline {
-        agent any
-
-        stages {
-            stage('Build') {
-                steps {
-                    script {
-                        docker.image('gradle:6.8.3-jdk11').inside {
-                            sh 'gradle clean build'
-                        }
-                    }
-                }
-            }
-
-            stage('Test') {
-                steps {
-                    script {
-                        docker.image('gradle:6.8.3-jdk11').inside {
-                            sh 'gradle test'
-                        }
-                    }
-                }
-            }
-
-            stage('Build Docker Image') {
-                steps {
-                    script {
-                        sh 'docker build -t tu-usuario/portfolio-backend .'
-                    }
-                }
-            }
-
-            stage('Deploy with Docker Compose') {
-                steps {
-                    script {
-                        sh 'docker-compose up -d'
-                    }
-                }
-            }
-        }
-
-        post {
-            always {
-                cleanWs()
-            }
-        }
-    }
-    ```
-
-### Despliegue en Docker
-- Crear Dockerfiles para cada servicio.
-- Usar Docker Compose para orquestar los servicios.
-
-### Despliegue en Kubernetes
-- Configurar archivos YAML para el despliegue en Kubernetes.
-- Utilizar un proveedor de nube como AWS EKS, GKE o AKS para el despliegue.
-
-## Contribuciones
-Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request para discutir cualquier cambio importante antes de enviar una propuesta.
-
-## Licencia
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+---
+This README provides a **high-level overview** of the system. For detailed documentation, refer to the individual microservice documentation.
