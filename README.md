@@ -35,6 +35,10 @@ graph TD;
 
 The system is containerized using **Docker** and orchestrated using **Kubernetes on AWS (EKS)**. Other AWS services such as **S3** (for storage) and **SNS/SQS** (for notifications) are also integrated.
 
+## Trading Bots
+
+- `trading-bots/mql5/MovingAverageCrossBot.mq5` contains an MQL5 Expert Advisor converted from a typical MQL4-style moving-average crossover bot. It uses MQL5 indicator handles, `CopyBuffer`, and the `CTrade` API instead of MQL4 order functions.
+
 ## Future Enhancements
 
 - Implementing GraphQL for optimized data fetching.
